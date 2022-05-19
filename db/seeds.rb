@@ -8,8 +8,10 @@
 require "json"
 require "open-uri"
 
-url = "http://tmdb.lewagon.com/movie/top_rated?api_key=<your_api_key"
-what_is_this_even = URI.open(url).read
-film = JSON.parse(what_is_this_even)
-
-puts "#{film["name"]} - #{film["bio"]}"
+url = "http://tmdb.lewagon.com/movie/top_rated"
+website = URI.open(url).read
+films = JSON.parse(website)
+films["results"].each do |film|
+  Movie.create(title: film["original_title"], overview: film["overview"], poster_url: film["poster_path"],
+    rating: film["vote_average"])
+end
